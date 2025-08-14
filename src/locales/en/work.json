@@ -1,0 +1,32 @@
+{
+  "pageTitle": "Our Works & Projects",
+  "pageSubtitle": "A showcase of projects we have crafted with our clients.",
+  "heroTitle": "Our Works & Projects",
+  "heroSubtitle": "A showcase of projects we have crafted with our clients.",
+  "projectCard": {
+    "viewProject": "View Project",
+    "learnMore": "Learn More"
+  },
+  "categories": {
+    "all": "All Projects",
+    "dashboard": "Dashboard",
+    "website": "Website", 
+    "mobileApp": "Mobile App",
+    "ecommerce": "E-commerce"
+  },
+  "tags": {
+    "uxui": "UX/UI",
+    "dashboard": "Dashboard", 
+    "dataAnalytics": "Data Analytics",
+    "website": "Website",
+    "ecommerce": "E-commerce",
+    "mobileApp": "Mobile App",
+    "fintech": "FinTech",
+    "security": "Security"
+  },
+  "loading": "Loading projects...",
+  "noProjects": "No projects found.",
+  "backToWork": "← Back to Work",
+  "nextProject": "Next Project →",
+  "prevProject": "← Previous Project"
+}

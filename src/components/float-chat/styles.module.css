@@ -1,0 +1,10 @@
+.inputBox {
+  padding: 0.5rem;
+}
+.inputBox::before {
+  color: rgba(0, 0, 0, 0.3);
+  content: attr(data-placeholder);
+  left: 0.5rem;
+  pointer-events: none;
+  position: absolute;
+}

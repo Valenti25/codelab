@@ -1,0 +1,64 @@
+{
+   "menu": {
+      "service": "Service",
+      "showcases": "Showcases",
+      "resources": "Resources"
+   },
+   "greeting": "End-to-end website and application development services",
+   "secondHeader": "Smart digital partner",
+   "detailHero1": "Creative design for every platform",
+   "detailHero2": "IT solutions tailored for your business",
+   "ourService": "Solutions That Work for You",
+   "ourServiceDetail": "Our solutions are designed with your goals in mind, ensuring you get exactly what your business needs to grow.",
+   "aboutUsTitle": "About CODELAB",
+   "aboutUsElemTitle": "Featured Websites",
+   "aboutUsDetail": "We provide website and application development, graphic and print design services for both businesses and individuals, along with IT consulting and problem-solving solutions.",
+   "contactBtn": "CONTACT US",
+   "service": {
+      "development": "Web and application development tailored to your business needs.",
+      "security": "Security solutions to protect your systems and data.",
+      "consultant": "System design and development consultation.",
+      "design": "UX/UI design focused on delivering great user experiences.",
+      "cloud": "Reliable and secure cloud services.",
+      "social": "Social media management to boost your reach.",
+      "digital": "Digital marketing strategies to drive sales.",
+      "application": "Application development for Android and iOS.",
+      "analytics": "Data analytics to drive your business forward."
+   },
+   "consultantMsg": {
+      "msg1": "What kind of system would you like to develop?",
+      "msg2": "A customer management system.",
+      "msg3": "We can help design and structure that for you.",
+      "msg4": "Great! Please send me more details."
+   },
+   "whyChooseUs": "Why Choose CODELAB",
+   "whyChooseUsTopic": {
+      "topic1": "All-in-One Digital Solutions",
+      "topic1Detail": "From websites and applications to graphic design and print media, we offer complete digital services under one roof—saving you time and hassle.",
+      "topic2": "Designs that Understand Your Business",
+      "topic2Detail": "We focus on practical solutions that align with your business goals, not just visual appeal. Every design and development decision is made with your success in mind.",
+      "topic3": "Flexible and Detail-Oriented Service",
+      "topic3Detail": "Whether you have a clear vision or just an idea, we adapt to your needs and budget while paying close attention to the details that make your project unique.",
+      "topic4": "Reliable After-Sales Support",
+      "topic4Detail": "We go beyond project delivery with continuous support, maintenance, and updates to ensure your system evolves with your business."
+   },
+   "portfolio": "Creative Showcase",
+   "portfolioDetail": "A collection of real projects we’ve crafted with clients — including websites, applications, and high-quality design work.",
+   "testimonials": "Our Testimonials",
+   "testimonialsDetail": "Great results start with trust. Hear from real clients who chose to work with Codelab and discovered how we helped them grow through smart, reliable digital solutions.",
+   "stack": "Our Stack",
+   "stackDetail": "We work with modern, scalable, and proven technologies to build high-performance digital solutions.",
+   "formContact": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "company": "Company Name",
+      "subject": "Title",
+      "message": "Detail",
+      "submit": "Submit",
+      "conversation": "Start a conversation",
+      "chatTitle": "Chat"
+   },
+   "contact": "Contact Us",
+   "contactDetail": "If you’d like to register for a callback from us"
+}
