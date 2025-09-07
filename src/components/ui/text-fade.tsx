@@ -1,7 +1,7 @@
 'use client';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, type Variants, type Transition } from 'framer-motion';
 import * as React from 'react';
- 
+
 export function TextFade({
   direction,
   children,
@@ -13,25 +13,32 @@ export function TextFade({
   className?: string;
   staggerChildren?: number;
 }) {
-  const FADE_DOWN = {
-    show: { opacity: 1, y: 0, transition: { type: 'spring' } },
-    hidden: { opacity: 0, y: direction === 'down' ? -18 : 18 },
-  };
-  const ref = React.useRef(null);
+  const ref = React.useRef<HTMLDivElement | null>(null);
   const isInView = useInView(ref, { once: true });
+
+  // ล็อกชนิด transition ให้ถูกต้อง
+  const spring: Transition = { type: 'spring' };
+
+  // ประกาศเป็น Variants ชัดเจน และคำนวณจาก direction
+  const FADE_Y = direction === 'down' ? -18 : 18;
+  const FADE_DOWN: Variants = {
+    show: { opacity: 1, y: 0, transition: spring },
+    hidden: { opacity: 0, y: FADE_Y },
+  };
+
+  const containerVariants: Variants = {
+    hidden: {},
+    show: {
+      transition: { staggerChildren } as Transition,
+    },
+  };
+
   return (
     <motion.div
       ref={ref}
       initial="hidden"
-      animate={isInView ? 'show' : ''}
-      variants={{
-        hidden: {},
-        show: {
-          transition: {
-            staggerChildren: staggerChildren,
-          },
-        },
-      }}
+      animate={isInView ? 'show' : undefined}   // ✅ ไม่ใช้ '' แล้ว
+      variants={containerVariants}
       className={className}
     >
       {React.Children.map(children, (child) =>

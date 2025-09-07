@@ -1,9 +1,7 @@
 'use client'
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import dynamic from 'next/dynamic'
 import { AnimatePresence, motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
-import { TbDotsVertical } from 'react-icons/tb'
 
 // const SparklesCore = dynamic(() => import('./Sparkles').then((mod) => mod.SparklesCore), {
 //    ssr: false,
