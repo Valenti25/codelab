@@ -1,10 +1,9 @@
 import React, { CSSProperties, ComponentPropsWithoutRef } from "react";
-
 import { cn } from "@/lib/utils";
 
 export interface ShimmerButtonProps extends ComponentPropsWithoutRef<"button"> {
   shimmerColor?: string;
-  shimmerSize?: string;
+  shimmerSize?: string;      // ความหนาของขอบด้านใน (inner cut)
   borderRadius?: string;
   shimmerDuration?: string;
   background?: string;
@@ -27,13 +26,13 @@ export const ShimmerButton = React.forwardRef<
       children,
       ...props
     },
-    ref,
+    ref
   ) => {
     return (
       <button
         style={
           {
-            "--spread": "90deg",
+            "--spread": "90deg",                 // มุมกางของ conic
             "--shimmer-color": shimmerColor,
             "--radius": borderRadius,
             "--speed": shimmerDuration,
@@ -42,55 +41,94 @@ export const ShimmerButton = React.forwardRef<
           } as CSSProperties
         }
         className={cn(
-          "group relative z-0 flex cursor-pointer items-center justify-center overflow-hidden whitespace-nowrap border border-white/10 px-6 py-3 text-white [background:var(--bg)] [border-radius:var(--radius)] dark:text-black",
+          // พื้นฐานปุ่ม
+          "group relative z-0 flex cursor-pointer items-center justify-center overflow-hidden whitespace-nowrap",
+          "border border-white/10 px-6 py-3 [background:var(--bg)] [border-radius:var(--radius)]",
+          "text-white",                          // ปล่อยให้เป็นขาวทั้งสองธีม
           "transform-gpu transition-transform duration-300 ease-in-out active:translate-y-px",
-          className,
+          className
         )}
         ref={ref}
         {...props}
       >
-        {/* spark container */}
+        {/* Spark container (ให้อยู่เหนือ backdrop แต่ใต้ content) */}
         <div
           className={cn(
-            "-z-30 blur-[2px]",
-            "absolute inset-0 overflow-visible [container-type:size]",
+            "absolute inset-0 z-10 overflow-visible [container-type:size]" // z-10 (เดิม -z-30 ทำให้มองไม่เห็น)
           )}
+          style={{ pointerEvents: "none" }}
         >
-          {/* spark */}
-          <div className="absolute inset-0 h-[100cqh] animate-shimmer-slide [aspect-ratio:1] [border-radius:0] [mask:none]">
-            {/* spark before */}
-            <div className="absolute -inset-full w-auto rotate-0 animate-spin-around [background:conic-gradient(from_calc(270deg-(var(--spread)*0.5)),transparent_0,var(--shimmer-color)_var(--spread),transparent_var(--spread))] [translate:0_0]" />
+          {/* Spark ตัววิ่ง */}
+          <div
+            className="absolute inset-0 h-full w-full animate-shimmer-slide"
+            style={{ animationDuration: "var(--speed)" }}
+          >
+            {/* แท่งแสงแบบกราดโค้ง (conic) */}
+            <div
+              className={cn(
+                "absolute -inset-[40%] rotate-0 animate-spin-around", // ใช้ค่ากำหนดเองแทน -inset-full
+                "[background:conic-gradient(from_calc(270deg-(var(--spread)*0.5)),transparent_0,var(--shimmer-color)_var(--spread),transparent_var(--spread))]"
+              )}
+              style={{ animationDuration: "calc(var(--speed) * 2)" }}
+            />
           </div>
         </div>
-        {children}
 
-        {/* Highlight */}
+        {/* เนื้อหา */}
+        <span className="relative z-20">{children}</span>
+
+        {/* Highlight ด้านบน (แก้ insert-0 -> inset-0) */}
         <div
           className={cn(
-            "insert-0 absolute size-full",
-
-            "rounded-2xl px-4 py-1.5 text-sm font-medium shadow-[inset_0_-8px_10px_#ffffff1f]",
-
-            // transition
+            "absolute inset-0 z-20 rounded-2xl",
+            "shadow-[inset_0_-8px_10px_#ffffff1f]",
             "transform-gpu transition-all duration-300 ease-in-out",
-
-            // on hover
             "group-hover:shadow-[inset_0_-6px_10px_#ffffff3f]",
-
-            // on click
-            "group-active:shadow-[inset_0_-10px_10px_#ffffff3f]",
+            "group-active:shadow-[inset_0_-10px_10px_#ffffff3f]"
           )}
+          style={{ pointerEvents: "none" }}
         />
 
-        {/* backdrop */}
+        {/* Backdrop (พื้นหลังชั้นใน) */}
         <div
           className={cn(
-            "absolute -z-20 [background:var(--bg)] [border-radius:var(--radius)] [inset:var(--cut)]",
+            "absolute -z-20 [background:var(--bg)] [border-radius:var(--radius)] [inset:var(--cut)]"
           )}
+          style={{ pointerEvents: "none" }}
         />
+
+        {/* Keyframes เผื่อยังไม่ได้ตั้งใน tailwind.config */}
+        <style jsx global>{`
+          @keyframes shimmer-slide {
+            from {
+              transform: translateX(-50%);
+            }
+            to {
+              transform: translateX(50%);
+            }
+          }
+          @keyframes spin-around {
+            from {
+              transform: rotate(0deg);
+            }
+            to {
+              transform: rotate(360deg);
+            }
+          }
+          .animate-shimmer-slide {
+            animation-name: shimmer-slide;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+          }
+          .animate-spin-around {
+            animation-name: spin-around;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+          }
+        `}</style>
       </button>
     );
-  },
+  }
 );
 
 ShimmerButton.displayName = "ShimmerButton";
