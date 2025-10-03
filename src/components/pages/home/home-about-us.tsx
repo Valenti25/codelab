@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { TextFade } from '@/components/ui/text-fade'
 import { TagHeading } from '@/components/ui/tag-heading'
-
+import DiagonalPromoTapes from '@/components/ui/DiagonalPromoTapes'
 const animateElem = {
    initial: {
       scale: 0,
@@ -164,6 +164,7 @@ export const HomeAboutUs = () => {
                                     <LuImage className="text-white" />
                                  </div>
                                  <p className="text-xs">Gallery</p>
+
                               </motion.div>
                               <motion.div
                                  {...animateElem}
@@ -173,9 +174,12 @@ export const HomeAboutUs = () => {
                                     <LuCode className="text-white" />
                                  </div>
                                  <p className="text-xs">Custom CMS</p>
+
                               </motion.div>
                            </div>
+
                         </div>
+
                      </motion.div>
                   </div>
 
@@ -305,21 +309,21 @@ export const HomeAboutUs = () => {
                                  smoothVelocity={smoothVelocity}
                                  radius={outerWidth}
                               />
-                              
+
                               <RotatingIcon
                                  src="/images/shopify.webp"
                                  startAngle={5.7}
                                  smoothVelocity={smoothVelocity}
                                  radius={outerWidth}
                               />
-                              
+
                               <RotatingIcon
                                  src="/images/laz.webp"
                                  startAngle={6.5}
                                  smoothVelocity={smoothVelocity}
                                  radius={outerWidth}
                               />
-                              
+
                               <RotatingIcon
                                  src="/images/wordpress.webp"
                                  startAngle={7.7}
@@ -332,6 +336,9 @@ export const HomeAboutUs = () => {
                   </div>
                </div>
             </div>
+         </div>
+         <div className='mb-10'>
+            <DiagonalPromoTapes />
          </div>
       </section>
    )
@@ -382,6 +389,8 @@ const RotatingIcon = ({
             height={58}
             className="size-9 object-contain sm:size-12 lg:size-auto"
          />
+
       </motion.div>
+
    )
 }
