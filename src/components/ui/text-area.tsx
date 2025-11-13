@@ -5,7 +5,7 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 import { useMotionTemplate, useMotionValue, motion } from 'framer-motion'
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLTextAreaElement> {}
+export interface InputProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
 
 const TextArea = React.forwardRef<HTMLTextAreaElement, InputProps>(
    ({ className, ...props }, ref) => {

@@ -1,18 +1,82 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { TextArea } from '@/components/ui/text-area'
 import { useTranslation } from 'react-i18next'
 import { useMotionTemplate, useMotionValue, motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
+import {
+  submitContactLead,
+  type ContactLeadPayload,
+  type ContactCategoryPayload,
+} from '@/services/contact.service'
+
+// 👇 category ที่จะให้ฟอร์มนี้ยิงเข้าไป (ใช้แบบเดียวกับที่เห็นในแอดมิน)
+const SUPPORT_CATEGORY: ContactCategoryPayload = {
+  id: 'support',
+  label: 'Technical Support',
+  shortLabel: 'ซัพพอร์ต',
+  description: 'แก้ไขปัญหา • ช่วยเหลือการใช้งาน',
+  responseTime: 'ทันที',
+  team: 'ทีมซัพพอร์ต',
+  bgColor: '#fef2ee',
+  color: '#f24822',
+  icon: { displayName: 'Wrench' },
+}
 
 export function FormContact() {
   const { t } = useTranslation()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    alert('กำลังปรับปรุงระบบ ขออภัยในความไม่สะดวก')
+    if (isSubmitting) return
+
+    const form = e.currentTarget
+    const formData = new FormData(form)
+
+    const name = String(formData.get('name') || '').trim()
+    const email = String(formData.get('email') || '').trim()
+    const phone = String(formData.get('phone') || '').trim()
+    const company = String(formData.get('company') || '').trim()
+    const subject = String(formData.get('subject') || '').trim()
+    const messageRaw = String(formData.get('message') || '').trim()
+
+    // กัน user เผลอกดส่งทั้ง ๆ ที่ไม่มีข้อความ (backend ต้องการ message เสมอในโหมด message)
+    if (!messageRaw && !subject) {
+      alert('กรุณากรอกหัวข้อหรือละเอียดข้อความก่อนส่ง 🙏')
+      return
+    }
+
+    const message = subject ? `[${subject}] ${messageRaw || ''}` : messageRaw
+
+    const payload: ContactLeadPayload = {
+      formType: 'message',
+      name,
+      email,
+      phone,
+      company: company || null,
+      message,
+      timezone: 'Asia/Bangkok',
+      source: 'website', // ให้เหมือนของเดิมในแอดมิน
+      contactCategory: SUPPORT_CATEGORY, // map ไปเป็น service = 'support' ใน backend
+    }
+
+    try {
+      setIsSubmitting(true)
+      console.log('submitContactLead payload =', payload)
+      const res = await submitContactLead(payload)
+      console.log('submitContactLead response =', res)
+
+      alert('ส่งข้อมูลเรียบร้อย ขอบคุณที่ติดต่อเรา 🙏')
+      form.reset()
+    } catch (err) {
+      console.error('submitContactLead error =', err)
+      alert('ส่งข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -20,47 +84,74 @@ export function FormContact() {
       <form className="w-full max-w-xl" onSubmit={handleSubmit}>
         <div className="mb-4 flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-2">
           <LabelInputContainer>
-            <InputGradient id="name" type="text" placeholder={t('formContact.name')} />
+            <InputGradient
+              id="name"
+              name="name"
+              type="text"
+              placeholder={t('formContact.name')}
+              required
+            />
           </LabelInputContainer>
           <LabelInputContainer>
-            <InputGradient id="email" type="email" placeholder={t('formContact.email')} />
+            <InputGradient
+              id="email"
+              name="email"
+              type="email"
+              placeholder={t('formContact.email')}
+              required
+            />
           </LabelInputContainer>
         </div>
 
         <div className="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
           <LabelInputContainer className="mb-4">
-            {/* ช่องโทร: กรอกเลขอย่างเดียว + คีย์บอร์ดตัวเลข */}
             <InputGradient
               id="phone"
+              name="phone"
               type="tel"
               placeholder={t('formContact.phone')}
               maxLength={15}
+              required
             />
           </LabelInputContainer>
           <LabelInputContainer className="mb-4">
-            <InputGradient id="company" type="text" placeholder={t('formContact.company')} />
+            <InputGradient
+              id="company"
+              name="company"
+              type="text"
+              placeholder={t('formContact.company')}
+            />
           </LabelInputContainer>
         </div>
 
         <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-2">
           <LabelInputContainer className="mb-4">
-            <InputGradient id="subject" type="text" placeholder={t('formContact.subject')} />
+            <InputGradient
+              id="subject"
+              name="subject"
+              type="text"
+              placeholder={t('formContact.subject')}
+            />
           </LabelInputContainer>
         </div>
 
         <LabelInputContainer className="mb-8">
           <TextArea
             id="message"
+            name="message"
             placeholder={t('formContact.message')}
             className="resize-none appearance-none"
+            rows={4}
+            required // ให้ตรงกับ backend ที่ต้องการ message เสมอในโหมด message
           />
         </LabelInputContainer>
 
         <Button
           type="submit"
+          disabled={isSubmitting}
           className="h-max w-full lg:w-max rounded-md bg-gradient-to-b from-primary to-primary-light px-6 py-2.5 text-sm text-white shadow-[0px_1px_3px_0px_#FFFFFF4D_inset] drop-shadow-2xl drop-shadow-primary/30"
         >
-          {t('formContact.submit')}
+          {isSubmitting ? t('formContact.submitting') ?? 'กำลังส่ง...' : t('formContact.submit')}
         </Button>
       </form>
 
@@ -88,12 +179,11 @@ const LabelInputContainer = ({
   return <div className={cn('flex w-full flex-col space-y-2', className)}>{children}</div>
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 const InputGradient = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, id, onInput, ...props }, ref) => {
-    const radius = 100 // ปรับรัศมีเอฟเฟกต์ hover ได้
+    const radius = 100
     const [visible, setVisible] = React.useState(false)
 
     const mouseX = useMotionValue(0)
@@ -115,10 +205,12 @@ const InputGradient = React.forwardRef<HTMLInputElement, InputProps>(
 
     const isPhoneField = id === 'phone' || type === 'tel'
 
-    const handlePhoneBeforeInput = (e: React.FormEvent<HTMLInputElement> & { data?: string }) => {
+    const handlePhoneBeforeInput = (
+      e: React.FormEvent<HTMLInputElement> & { data?: string },
+    ) => {
       if (!isPhoneField) return
       const anyEvt = e as unknown as InputEvent
-      const data = (anyEvt).data
+      const data = anyEvt.data
       if (typeof data === 'string' && /\D/.test(data)) {
         anyEvt.preventDefault?.()
       }
@@ -135,10 +227,9 @@ const InputGradient = React.forwardRef<HTMLInputElement, InputProps>(
       onInput?.(e)
     }
 
-    // ---- attributes เพื่อ UX ที่ดีบนมือถือ ----
     const phoneExtraProps = isPhoneField
       ? ({
-          inputMode: 'numeric', // เปิดคีย์บอร์ดตัวเลข
+          inputMode: 'numeric',
           autoComplete: 'tel',
           pattern: '[0-9]*',
           enterKeyHint: 'send',
